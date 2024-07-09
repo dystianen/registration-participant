@@ -27,7 +27,7 @@ class Admin extends Migration
             ],
             'password' => [
                 'type' => 'VARCHAR',
-                'constraint' => 50,
+                'constraint' => 255,
             ],
             'nama_admin' => [
                 'type' => 'VARCHAR',

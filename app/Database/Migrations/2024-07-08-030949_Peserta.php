@@ -27,7 +27,11 @@ class Peserta extends Migration
             ],
             'password' => [
                 'type' => 'VARCHAR',
-                'constraint' => 50,
+                'constraint' => 255,
+            ],
+            'nomor_ktp' => [
+                'type' => 'INT',
+                'constraint' => 100,
             ],
             'nama_peserta' => [
                 'type' => 'VARCHAR',
