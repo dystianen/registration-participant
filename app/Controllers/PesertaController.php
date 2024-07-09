@@ -26,7 +26,7 @@ class PesertaController extends BaseController
     public function listPesertaView()
     {
         $peserta = $this->pesertaModel
-            ->where('peserta.deleted_at', null, true)
+            ->where('deleted_at', null)
             ->findAll();
 
         $data = [
