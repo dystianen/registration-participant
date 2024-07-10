@@ -18,7 +18,7 @@
   <div class="card">
     <div class="card-body">
       <h5>Daftar Riwayat Hidup</h5>
-      <form enctype="multipart/form-data" action="<?php echo base_url(); ?>/peserta/edit/<?= $peserta['id_peserta'] ?>" method="post">
+      <form enctype="multipart/form-data" action="<?php echo base_url(); ?>/peserta/edit/<?= $peserta['id_riwayat_hidup'] ?>" method="post">
         <div class="mb-3">
           <label for="status" class="form-label">Status</label>
           <input type="hidden" id="status" name="status" class="form-control" value="<?= $peserta['status'] ?>">
@@ -27,15 +27,15 @@
 
         <div class="mb-3">
           <label for="email" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="email" name="email" value="<?= $peserta['email'] ?>">
+          <input disabled type="email" class="form-control" id="email" name="email" value="<?= $peserta['email'] ?>">
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Nama</label>
+          <input disabled type="text" class="form-control" id="name" name="name" value="<?= $peserta['name'] ?>">
         </div>
         <div class="mb-3">
           <label for="nomor_ktp" class="form-label">Nomor KTP</label>
           <input type="text" class="form-control" id="nomor_ktp" name="nomor_ktp" value="<?= $peserta['nomor_ktp'] ?>">
-        </div>
-        <div class="mb-3">
-          <label for="nama_peserta" class="form-label">Nama</label>
-          <input type="text" class="form-control" id="nama_peserta" name="nama_peserta" value="<?= $peserta['nama_peserta'] ?>">
         </div>
         <div class="mb-3">
           <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
@@ -68,7 +68,7 @@
           </thead>
           <tbody class="table-group-divider">
             <?php $startIndex = 1; ?>
-            <?php foreach ($jenjang as $d) : ?>
+            <?php foreach ($pendidikan as $d) : ?>
               <tr>
                 <th scope="row">
                   <select class="form-select" id="jenjang<?= $startIndex ?>" name="jenjang<?= $startIndex ?>">
@@ -87,7 +87,7 @@
                   <input type="number" class="form-control" id="tahun_lulus<?= $startIndex ?>" name="tahun_lulus<?= $startIndex ?>" value="<?= $d['tahun_lulus'] ?>">
                 </td>
                 <td>
-                  <input type="hidden" name="jenjang_id<?= $startIndex ?>" value="<?= $d['id_jenjang'] ?>">
+                  <input type="hidden" name="jenjang_id<?= $startIndex ?>" value="<?= $d['id_pendidikan'] ?>">
                 </td>
               </tr>
               <?php $startIndex++; ?>

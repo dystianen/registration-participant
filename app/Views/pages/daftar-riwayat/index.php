@@ -1,25 +1,17 @@
 <?= $this->extend('layouts/app') ?>
 <?= $this->section('content') ?>
 <section class="d-flex justify-content-center">
-    <div class="card" style="width: 40rem;">
+    <div class="card" style="width: 50rem;">
         <div class="card-body">
             <h5 class="mb-4">Daftar Riwayat Hidup</h5>
-            <form enctype="multipart/form-data" action="<?php echo base_url(); ?>/peserta/create" method="post">
+            <form enctype="multipart/form-data" action="<?php echo base_url(); ?>/peserta/create?id_user=<?= $user['id_user'] ?>" method="post">
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="example@gmail.com">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="******">
+                    <label for="nama" class="form-label">Nama</label>
+                    <input disabled type="text" class="form-control" id="nama" name="nama" placeholder="XXXXXXXXXXXX" value="<?= $user['name'] ?>">
                 </div>
                 <div class="mb-3">
                     <label for="nomor_ktp" class="form-label">Nomor KTP</label>
                     <input type="text" class="form-control" id="nomor_ktp" name="nomor_ktp" placeholder="XXXXXXXXXXXX">
-                </div>
-                <div class="mb-3">
-                    <label for="nama_peserta" class="form-label">Nama</label>
-                    <input type="text" class="form-control" id="nama_peserta" name="nama_peserta" placeholder="nama ...">
                 </div>
                 <div class="mb-3">
                     <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
@@ -32,8 +24,8 @@
                 <div class="mb-3">
                     <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
                     <select class="form-select" id="jenis_kelamin" name="jenis_kelamin">
-                        <option value="Laki-laki">Laki-laki</option>
-                        <option value="Perempuan">Perempuan</option>
+                        <option value="LAKI-LAKI">Laki-laki</option>
+                        <option value="PEREMPUAN">Perempuan</option>
                     </select>
                 </div>
                 <div class="mb-3">

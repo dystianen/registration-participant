@@ -3,60 +3,81 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\JenjangModel;
-use App\Models\PesertaModel;
+use App\Models\PendidikanModel;
+use App\Models\RiwayatHidupModel;
+use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
 
-class PesertaController extends BaseController
+class RiwayatHidupController extends BaseController
 {
     use ResponseTrait;
 
-    protected $pesertaModel, $jenjangModel;
+    protected $userModel, $riwayatHidupModel, $pendidikanModel;
     public function __construct()
     {
-        $this->pesertaModel = new PesertaModel();
-        $this->jenjangModel = new JenjangModel();
+        $this->userModel = new UserModel();
+        $this->riwayatHidupModel = new RiwayatHidupModel();
+        $this->pendidikanModel = new PendidikanModel();
     }
 
     public function index(): string
     {
-        return view('pages/daftar-riwayat/index');
-    }
-
-    public function listPesertaView()
-    {
-        $peserta = $this->pesertaModel
-            ->where('deleted_at', null)
-            ->findAll();
+        $id_user = $this->request->getVar('id_user');
+        $user = $this->userModel
+            ->where('id_user', $id_user)
+            ->first();
 
         $data = [
-            "data" => $peserta,
+            'user' => $user
+        ];
+
+        return view('pages/daftar-riwayat/index', $data);
+    }
+
+    public function listRiwayatHidupView()
+    {
+        $riwayat_hidup = [];
+        if (session()->get('role') == "PESERTA") {
+            $riwayat_hidup = $this->riwayatHidupModel
+                ->select('riwayat_hidup.*, users.*')
+                ->join('users', 'riwayat_hidup.id_user = users.id_user')
+                ->where('riwayat_hidup.id_user', session()->get('id_user'))
+                ->where('riwayat_hidup.deleted_at', null)
+                ->findAll();
+        } else {
+            $riwayat_hidup = $this->riwayatHidupModel
+                ->where('deleted_at', null)
+                ->findAll();
+        }
+
+        $data = [
+            "data" => $riwayat_hidup,
         ];
         return view('/pages/peserta/index.php', $data);
     }
 
     public function editView()
     {
+        $id_riwayat_hidup = $this->request->getVar('id_riwayat_hidup');
 
-        // Get id_peserta from query parameters
-        $id_peserta = $this->request->getVar('id_peserta');
+        $peserta = $this->riwayatHidupModel
+            ->select('riwayat_hidup.*, users.*')
+            ->join('users', 'riwayat_hidup.id_user = users.id_user')
+            ->where('riwayat_hidup.id_riwayat_hidup', $id_riwayat_hidup)
+            ->where('riwayat_hidup.deleted_at', null)
+            ->first();
 
-        // Fetch the specific peserta by id_peserta
-        $peserta = $this->pesertaModel
-            ->where('id_peserta', $id_peserta)
-            ->where('deleted_at', null)
-            ->first();  // Use first() to retrieve a single row
-
-        $jenjang = $this->pesertaModel
-            ->select('jenjang.*')
-            ->join('jenjang', 'jenjang.id_peserta = peserta.id_peserta')
-            ->where('peserta.id_peserta', $id_peserta)
-            ->where('jenjang.deleted_at', null)
+        $pendidikan = $this->pendidikanModel
+            ->select('pendidikan.*, riwayat_hidup.*')
+            ->join('riwayat_hidup', 'pendidikan.id_riwayat_hidup = riwayat_hidup.id_riwayat_hidup')
+            ->where('pendidikan.id_riwayat_hidup', $id_riwayat_hidup)
+            ->where('riwayat_hidup.deleted_at', null)
             ->findAll();
+
 
         $data = [
             "peserta" => $peserta,
-            "jenjang" => $jenjang,
+            "pendidikan" => $pendidikan,
         ];
 
         return view('pages/peserta/edit.php', $data);
@@ -65,11 +86,10 @@ class PesertaController extends BaseController
     public function create()
     {
         // Step 1: Insert data into peserta table
-        $dataPeserta = [
-            'email' => $this->request->getVar('email'),
-            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+        $id_user = $this->request->getVar('id_user');
+        $data_riwayat_hidup = [
+            'id_user' => $id_user,
             'nomor_ktp' => $this->request->getVar('nomor_ktp'),
-            'nama_peserta' => $this->request->getVar('nama_peserta'),
             'tempat_lahir' => $this->request->getVar('tempat_lahir'),
             'tanggal_lahir' => $this->request->getVar('tanggal_lahir'),
             'jenis_kelamin' => $this->request->getVar('jenis_kelamin'),
@@ -79,13 +99,13 @@ class PesertaController extends BaseController
         ];
 
         // Perform the insert and capture the inserted ID
-        $this->pesertaModel->insert($dataPeserta);
-        $id_peserta = $this->pesertaModel->insertID(); // Get the ID of the inserted row
+        $this->riwayatHidupModel->insert($data_riwayat_hidup);
+        $id_riwayat_hidup = $this->riwayatHidupModel->insertID(); // Get the ID of the inserted row
 
         // Step 2: Insert data into jenjang table using insertBatch
-        $dataJenjang = [
+        $dataPendidikan = [
             [
-                'id_peserta' => $id_peserta,
+                'id_riwayat_hidup' => $id_riwayat_hidup,
                 'jenjang' => $this->request->getVar('jenjang1'),
                 'nama_sekolah' => $this->request->getVar('nama_sekolah1'),
                 'lokasi' => $this->request->getVar('lokasi1'),
@@ -93,7 +113,7 @@ class PesertaController extends BaseController
                 'deleted_at' => null,
             ],
             [
-                'id_peserta' => $id_peserta,
+                'id_riwayat_hidup' => $id_riwayat_hidup,
                 'jenjang' => $this->request->getVar('jenjang2'),
                 'nama_sekolah' => $this->request->getVar('nama_sekolah2'),
                 'lokasi' => $this->request->getVar('lokasi2'),
@@ -101,7 +121,7 @@ class PesertaController extends BaseController
                 'deleted_at' => null,
             ],
             [
-                'id_peserta' => $id_peserta,
+                'id_riwayat_hidup' => $id_riwayat_hidup,
                 'jenjang' => $this->request->getVar('jenjang3'),
                 'nama_sekolah' => $this->request->getVar('nama_sekolah3'),
                 'lokasi' => $this->request->getVar('lokasi3'),
@@ -111,55 +131,49 @@ class PesertaController extends BaseController
         ];
 
         // Insert the batch of data into jenjang table
-        $this->jenjangModel->insertBatch($dataJenjang);
+        $this->pendidikanModel->insertBatch($dataPendidikan);
 
         // Step 3: Set flash message and redirect
-        session()->setFlashdata('success', 'Register Successfully.');
-        return redirect()->to(base_url("/login"));
+        session()->setFlashdata('success', 'Add Riwayat Hidup Successfully.');
+        return redirect()->to(base_url("/waiting?id_user" . $id_user));
     }
 
-    public function edit($id_peserta)
+    public function edit($id_riwayat_hidup)
     {
         // Check if id_peserta is present
-        if (!$id_peserta) {
+        if (!$id_riwayat_hidup) {
             return redirect()->to('/peserta')->with('error', 'ID Peserta is required');
         }
 
+
         // Step 1: Update data in peserta table
-        $dataPeserta = [
-            'email' => $this->request->getVar('email'),
-            'nomor_ktp' => $this->request->getVar('nomor_ktp'),
-            'nama_peserta' => $this->request->getVar('nama_peserta'),
+        $data_peserta = [
             'tempat_lahir' => $this->request->getVar('tempat_lahir'),
+            'nomor_ktp' => $this->request->getVar('nomor_ktp'),
             'tanggal_lahir' => $this->request->getVar('tanggal_lahir'),
             'jenis_kelamin' => $this->request->getVar('jenis_kelamin'),
             'alamat' => $this->request->getVar('alamat'),
-            'status' => $this->request->getVar('status'),
         ];
 
-        if ($this->request->getVar('password')) {
-            $dataPeserta['password'] = password_hash($this->request->getVar('password'), PASSWORD_DEFAULT);
-        }
-
-        $this->pesertaModel->update($id_peserta, $dataPeserta);
+        $this->riwayatHidupModel->update($id_riwayat_hidup, $data_peserta);
 
         // Step 2: Update data in jenjang table
         $index = 1;
         while ($this->request->getVar("jenjang$index")) {
-            $dataJenjang = [
+            $data_pendidikan = [
                 'jenjang' => $this->request->getVar("jenjang$index"),
                 'nama_sekolah' => $this->request->getVar("nama_sekolah$index"),
                 'lokasi' => $this->request->getVar("lokasi$index"),
                 'tahun_lulus' => $this->request->getVar("tahun_lulus$index"),
             ];
 
-            $jenjangId = $this->request->getVar("jenjang_id$index");
+            $pendidikan_id = $this->request->getVar("pendidikan_id$index");
 
-            if ($jenjangId) {
-                $this->jenjangModel->update($jenjangId, $dataJenjang);
+            if ($pendidikan_id) {
+                $this->pendidikanModel->update($pendidikan_id, $data_pendidikan);
             } else {
-                $dataJenjang['id_peserta'] = $id_peserta;
-                $this->jenjangModel->insert($dataJenjang);
+                $data_pendidikan['id_riwayat_hidup'] = $id_riwayat_hidup;
+                $this->pendidikanModel->insert($data_pendidikan);
             }
 
             $index++;
@@ -172,7 +186,7 @@ class PesertaController extends BaseController
     public function approve($id_peserta)
     {
         // Update status to APPROVED
-        $this->pesertaModel->update($id_peserta, ['status' => 'APPROVED']);
+        $this->userModel->update($id_peserta, ['status' => 'APPROVED']);
 
         // Set flash message and redirect
         session()->setFlashdata('success', 'Peserta approved successfully.');
@@ -182,7 +196,7 @@ class PesertaController extends BaseController
     public function delete($id_peserta)
     {
         // Set deleted_at to current timestamp
-        $this->pesertaModel->update($id_peserta, ['deleted_at' => date('Y-m-d H:i:s')]);
+        $this->userModel->update($id_peserta, ['deleted_at' => date('Y-m-d H:i:s')]);
 
         // Set flash message and redirect
         session()->setFlashdata('success', 'Peserta deleted successfully.');

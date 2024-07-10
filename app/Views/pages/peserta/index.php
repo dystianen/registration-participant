@@ -38,7 +38,7 @@
             <td scope="row"><?= $startIndex++ ?></td>
             <td scope="row"><?= $d["email"] ?></td>
             <td><?= $d["nomor_ktp"] ?></td>
-            <td><?= $d["nama_peserta"] ?></td>
+            <td><?= $d["name"] ?></td>
             <td><?= $d["tempat_lahir"] ?></td>
             <td><?= $d["tanggal_lahir"] ?></td>
             <td><?= $d["jenis_kelamin"] ?></td>
@@ -47,15 +47,15 @@
             <td>
               <div>
                 <?php if (session()->get('role') == 'admin' && $d["status"] !== "APPROVED") : ?>
-                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal<?= $d['id_peserta'] ?>">
+                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal<?= $d['id_riwayat_hidup'] ?>">
                     <i class="fas fa-check" title="Approve"></i>
                   </button>
                 <?php endif; ?>
-                <button class="btn btn-secondary" onclick="window.location.href = '/peserta/edit?id_peserta=<?= $d['id_peserta'] ?>'">
+                <button class="btn btn-secondary" onclick="window.location.href = '/peserta/edit?id_riwayat_hidup=<?= $d['id_riwayat_hidup'] ?>'">
                   <i class="fas fa-edit" title="Edit"></i>
                 </button>
                 <?php if (session()->get('role') == 'admin') : ?>
-                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $d['id_peserta'] ?>">
+                  <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $d['id_riwayat_hidup'] ?>">
                     <i class="fas fa-trash-alt" title="Delete"></i>
                   </button>
                 <?php endif; ?>
@@ -70,7 +70,7 @@
 
 <!-- modal approve -->
 <?php foreach ($data as $d) : ?>
-  <div class="modal fade" id="approveModal<?= $d['id_peserta'] ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal fade" id="approveModal<?= $d['id_riwayat_hidup'] ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-body d-flex flex-column justify-content-center text-center">
@@ -81,7 +81,7 @@
             Are you sure want to approve this data?
           </div>
           <div class="modal-footer" style="justify-content: center; gap: 16px">
-            <form class="d-inline" method="post" action="<?= base_url(); ?>/peserta/approve/<?= $d['id_peserta'] ?>">
+            <form class="d-inline" method="post" action="<?= base_url(); ?>/peserta/approve/<?= $d['id_riwayat_hidup'] ?>">
               <button type="submit" class="btn btn-primary">Yes</button>
             </form>
             <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">No</button>
@@ -94,7 +94,7 @@
 
 <!-- modal delete -->
 <?php foreach ($data as $d) : ?>
-  <div class="modal fade" id="deleteModal<?= $d['id_peserta'] ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal fade" id="deleteModal<?= $d['id_riwayat_hidup'] ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-body d-flex flex-column justify-content-center text-center">
@@ -105,7 +105,7 @@
             Are you sure want to delete this data?
           </div>
           <div class="modal-footer" style="justify-content: center; gap: 16px">
-            <form class="d-inline" method="post" action="<?= base_url(); ?>/peserta/delete/<?= $d['id_peserta'] ?>">
+            <form class="d-inline" method="post" action="<?= base_url(); ?>/peserta/delete/<?= $d['id_riwayat_hidup'] ?>">
               <button type="submit" class="btn btn-primary">Yes</button>
             </form>
             <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">No</button>

@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class AdminModel extends Model
+class PendidikanModel extends Model
 {
-    protected $table            = 'admin';
-    protected $primaryKey       = 'id_admin';
+    protected $table            = 'pendidikan';
+    protected $primaryKey       = 'id_pendidikan';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['email', 'password', 'nama_admin', 'created_at', 'updated_at', 'deleted_at'];
+    protected $allowedFields    = ['id_riwayat_hidup', 'jenjang', 'nama_sekolah', 'lokasi', 'tahun_lulus', 'created_at', 'updated_at', 'deleted_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

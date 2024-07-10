@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class JenjangModel extends Model
+class UserModel extends Model
 {
-    protected $table            = 'jenjang';
-    protected $primaryKey       = 'id_jenjang';
+    protected $table            = 'users';
+    protected $primaryKey       = 'is_user';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_peserta', 'jenjang', 'nama_sekolah', 'lokasi', 'tahun_lulus', 'created_at', 'updated_at', 'deleted_at'];
+    protected $allowedFields    = ['name', 'email', 'password', 'status', 'created_at', 'updated_at', 'deleted_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

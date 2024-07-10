@@ -5,7 +5,7 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class Admin extends Migration
+class Pendidikan extends Migration
 {
     protected $forge;
     public function __construct()
@@ -15,23 +15,32 @@ class Admin extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id_admin' => [
+            'id_pendidikan' => [
                 'type' => 'INT',
                 'constraint' => 10,
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'email' => [
+            'id_riwayat_hidup' => [
+                'type' => 'INT',
+                'constraint' => 10,
+                'unsigned' => true,
+            ],
+            'jenjang' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'password' => [
+            'nama_sekolah' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'nama_admin' => [
+            'lokasi' => [
                 'type' => 'VARCHAR',
-                'constraint' => 255,
+                'constraint' => 100,
+            ],
+            'tahun_lulus' => [
+                'type' => 'INT',
+                'constraint' => 50,
             ],
             'created_at' => [
                 'type'    => 'TIMESTAMP',
@@ -48,12 +57,13 @@ class Admin extends Migration
             ],
         ]);
 
-        $this->forge->addKey('id_admin', true);
-        $this->forge->createTable('admin');
+        $this->forge->addKey('id_pendidikan', true);
+        $this->forge->addForeignKey('id_riwayat_hidup', 'riwayat_hidup', 'id_riwayat_hidup');
+        $this->forge->createTable('pendidikan');
     }
 
     public function down()
     {
-        $this->forge->dropTable('admin');
+        $this->forge->dropTable('pendidikan');
     }
 }

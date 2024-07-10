@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PesertaModel extends Model
+class RiwayatHidupModel extends Model
 {
-    protected $table            = 'peserta';
-    protected $primaryKey       = 'id_peserta';
+    protected $table            = 'riwayat_hidup';
+    protected $primaryKey       = 'id_riwayat_hidup';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['email', 'password', 'nomor_ktp', 'nama_peserta', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'status', 'created_at', 'updated_at', 'deleted_at'];
+    protected $allowedFields    = ['id_user', 'nomor_ktp', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'created_at', 'updated_at', 'deleted_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

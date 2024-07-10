@@ -5,43 +5,38 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class Jenjang extends Migration
+class Users extends Migration
 {
-    protected $forge;
-    public function __construct()
-    {
-        $this->forge = \Config\Database::forge();
-    }
     public function up()
     {
         $this->forge->addField([
-            'id_jenjang' => [
+            'id_user' => [
                 'type' => 'INT',
                 'constraint' => 10,
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'id_peserta' => [
-                'type' => 'INT',
-                'constraint' => 10,
-                'unsigned' => true,
-            ],
-            'jenjang' => [
-                'type' => 'VARCHAR',
-                'constraint' => 50,
-            ],
-            'nama_sekolah' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-            ],
-            'lokasi' => [
+            'name' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100,
             ],
-            'tahun_lulus' => [
-                'type' => 'INT',
-                'constraint' => 50,
+            'email' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
             ],
+            'password' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+            ],
+            'status' => [
+                'type' => 'VARCHAR',
+                'constraint' => 100,
+            ],
+            'role' => array(
+                'type' => 'ENUM("ADMIN","PESERTA")',
+                'default' => 'PESERTA',
+                'null' => FALSE,
+            ),
             'created_at' => [
                 'type'    => 'TIMESTAMP',
                 'default' => new RawSql('CURRENT_TIMESTAMP'),
@@ -57,13 +52,12 @@ class Jenjang extends Migration
             ],
         ]);
 
-        $this->forge->addKey('id_jenjang', true);
-        $this->forge->addForeignKey('id_peserta', 'peserta', 'id_peserta');
-        $this->forge->createTable('jenjang');
+        $this->forge->addKey('id_user', true);
+        $this->forge->createTable('users');
     }
 
     public function down()
     {
-        $this->forge->dropTable('jenjang');
+        $this->forge->dropTable('users');
     }
 }
