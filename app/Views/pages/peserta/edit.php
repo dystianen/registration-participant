@@ -21,7 +21,8 @@
       <form enctype="multipart/form-data" action="<?php echo base_url(); ?>/peserta/edit/<?= $peserta['id_peserta'] ?>" method="post">
         <div class="mb-3">
           <label for="status" class="form-label">Status</label>
-          <input disabled id="status" name="status" class="form-control" value="<?= $peserta['status'] ?>">
+          <input type="hidden" id="status" name="status" class="form-control" value="<?= $peserta['status'] ?>">
+          <input disabled class="form-control" value="<?= $peserta['status'] ?>">
         </div>
 
         <div class="mb-3">

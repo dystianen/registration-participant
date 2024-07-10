@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <main class="container-lg mt-3 mb-5" style="margin-left: 280px;">
+    <main class="container-lg mt-3 mb-5" style="margin-left: 320px;">
       <?= $this->renderSection('content') ?>
     </main>
   </div>
