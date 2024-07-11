@@ -31,6 +31,7 @@ class Users extends Migration
             'status' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100,
+                'null' => TRUE,
             ],
             'role' => array(
                 'type' => 'ENUM("ADMIN","PESERTA")',
