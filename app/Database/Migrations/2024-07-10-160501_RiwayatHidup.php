@@ -27,7 +27,7 @@ class RiwayatHidup extends Migration
                 'unsigned' => true,
             ],
             'nomor_ktp' => [
-                'type' => 'INT',
+                'type' => 'VARCHAR',
                 'constraint' => 100,
             ],
             'tempat_lahir' => [

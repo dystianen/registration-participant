@@ -39,7 +39,7 @@ class Pendidikan extends Migration
                 'constraint' => 100,
             ],
             'tahun_lulus' => [
-                'type' => 'INT',
+                'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
             'created_at' => [

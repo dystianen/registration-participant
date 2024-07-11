@@ -92,6 +92,7 @@ class UserController extends BaseController
             'email' => $this->request->getVar('email'),
             'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
             'name' => $this->request->getVar('name'),
+            'status' => "PENDING",
             'deleted_at' => null,
         ];
 
@@ -109,10 +110,18 @@ class UserController extends BaseController
             ->where('status', 'APPROVED')
             ->first();
 
-        if ($is_approved) {
+        if (isset($is_approved)) {
             return redirect()->to(base_url("/login"));
         };
 
         return view('/pages/waiting/index');
+    }
+
+    public function logout()
+    {
+        $session = session();
+        $session->destroy(); // Destroy the entire session
+
+        return redirect()->to(base_url("/login"));
     }
 }

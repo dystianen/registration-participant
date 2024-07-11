@@ -30,8 +30,8 @@
           <input disabled type="email" class="form-control" id="email" name="email" value="<?= $peserta['email'] ?>">
         </div>
         <div class="mb-3">
-          <label for="name" class="form-label">Nama</label>
-          <input disabled type="text" class="form-control" id="name" name="name" value="<?= $peserta['name'] ?>">
+          <label for="name" class="form-label">Nama Lengkap</label>
+          <input type="text" class="form-control" id="name" name="name" value="<?= $peserta['name'] ?>">
         </div>
         <div class="mb-3">
           <label for="nomor_ktp" class="form-label">Nomor KTP</label>

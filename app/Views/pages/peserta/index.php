@@ -21,8 +21,8 @@
         <tr>
           <th scope="col">No</th>
           <th scope="col">Email</th>
-          <th scope="col">Nomor KTP</th>
           <th scope="col">Nama Peserta</th>
+          <th scope="col">Nomor KTP</th>
           <th scope="col">Tempat Lahir</th>
           <th scope="col">Tanggal Lahir</th>
           <th scope="col">Jenis Kelamin</th>
@@ -37,24 +37,30 @@
           <tr>
             <td scope="row"><?= $startIndex++ ?></td>
             <td scope="row"><?= $d["email"] ?></td>
-            <td><?= $d["nomor_ktp"] ?></td>
             <td><?= $d["name"] ?></td>
+            <td><?= $d["nomor_ktp"] ?></td>
             <td><?= $d["tempat_lahir"] ?></td>
             <td><?= $d["tanggal_lahir"] ?></td>
             <td><?= $d["jenis_kelamin"] ?></td>
             <td><?= $d["alamat"] ?></td>
-            <td><?= $d["status"] ?></td>
+            <td>
+              <?php if ($d['status'] == 'PENDING') : ?>
+                <span class="badge rounded-pill text-bg-warning"><?= $d['status'] ?></span>
+              <?php else : ?>
+                <span class="badge rounded-pill text-bg-success"><?= $d['status'] ?></span>
+              <?php endif; ?>
+            </td>
             <td>
               <div>
-                <?php if (session()->get('role') == 'admin' && $d["status"] !== "APPROVED") : ?>
-                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal<?= $d['id_riwayat_hidup'] ?>">
+                <?php if (session()->get('role') == 'ADMIN' && $d["status"] !== "APPROVED") : ?>
+                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal<?= $d['id_user'] ?>">
                     <i class="fas fa-check" title="Approve"></i>
                   </button>
                 <?php endif; ?>
                 <button class="btn btn-secondary" onclick="window.location.href = '/peserta/edit?id_riwayat_hidup=<?= $d['id_riwayat_hidup'] ?>'">
                   <i class="fas fa-edit" title="Edit"></i>
                 </button>
-                <?php if (session()->get('role') == 'admin') : ?>
+                <?php if (session()->get('role') == 'ADMIN') : ?>
                   <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $d['id_riwayat_hidup'] ?>">
                     <i class="fas fa-trash-alt" title="Delete"></i>
                   </button>
@@ -70,7 +76,7 @@
 
 <!-- modal approve -->
 <?php foreach ($data as $d) : ?>
-  <div class="modal fade" id="approveModal<?= $d['id_riwayat_hidup'] ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal fade" id="approveModal<?= $d['id_user'] ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-body d-flex flex-column justify-content-center text-center">
@@ -81,7 +87,7 @@
             Are you sure want to approve this data?
           </div>
           <div class="modal-footer" style="justify-content: center; gap: 16px">
-            <form class="d-inline" method="post" action="<?= base_url(); ?>/peserta/approve/<?= $d['id_riwayat_hidup'] ?>">
+            <form class="d-inline" method="post" action="<?= base_url(); ?>/peserta/approve/<?= $d['id_user'] ?>">
               <button type="submit" class="btn btn-primary">Yes</button>
             </form>
             <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">No</button>

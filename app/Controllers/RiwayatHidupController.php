@@ -46,7 +46,9 @@ class RiwayatHidupController extends BaseController
                 ->findAll();
         } else {
             $riwayat_hidup = $this->riwayatHidupModel
-                ->where('deleted_at', null)
+                ->select('riwayat_hidup.*, users.*')
+                ->join('users', 'riwayat_hidup.id_user = users.id_user')
+                ->where('riwayat_hidup.deleted_at', null)
                 ->findAll();
         }
 
@@ -74,7 +76,6 @@ class RiwayatHidupController extends BaseController
             ->where('riwayat_hidup.deleted_at', null)
             ->findAll();
 
-
         $data = [
             "peserta" => $peserta,
             "pendidikan" => $pendidikan,
@@ -94,7 +95,6 @@ class RiwayatHidupController extends BaseController
             'tanggal_lahir' => $this->request->getVar('tanggal_lahir'),
             'jenis_kelamin' => $this->request->getVar('jenis_kelamin'),
             'alamat' => $this->request->getVar('alamat'),
-            'status' => "PENDING",
             'deleted_at' => null,
         ];
 
@@ -135,7 +135,7 @@ class RiwayatHidupController extends BaseController
 
         // Step 3: Set flash message and redirect
         session()->setFlashdata('success', 'Add Riwayat Hidup Successfully.');
-        return redirect()->to(base_url("/waiting?id_user" . $id_user));
+        return redirect()->to(base_url("/waiting?id_user=" . $id_user));
     }
 
     public function edit($id_riwayat_hidup)
@@ -145,17 +145,26 @@ class RiwayatHidupController extends BaseController
             return redirect()->to('/peserta')->with('error', 'ID Peserta is required');
         }
 
+        $current = $this->riwayatHidupModel
+            ->where('id_riwayat_hidup', $id_riwayat_hidup)
+            ->where('deleted_at', null)
+            ->first();
+
+        $data_user = [
+            'name' => $this->request->getVar('name'),
+        ];
+        $this->userModel->update($current['id_user'], $data_user);
 
         // Step 1: Update data in peserta table
-        $data_peserta = [
-            'tempat_lahir' => $this->request->getVar('tempat_lahir'),
+        $data_riwayat_hidup = [
             'nomor_ktp' => $this->request->getVar('nomor_ktp'),
+            'tempat_lahir' => $this->request->getVar('tempat_lahir'),
             'tanggal_lahir' => $this->request->getVar('tanggal_lahir'),
             'jenis_kelamin' => $this->request->getVar('jenis_kelamin'),
             'alamat' => $this->request->getVar('alamat'),
         ];
 
-        $this->riwayatHidupModel->update($id_riwayat_hidup, $data_peserta);
+        $this->riwayatHidupModel->update($id_riwayat_hidup, $data_riwayat_hidup);
 
         // Step 2: Update data in jenjang table
         $index = 1;
@@ -193,10 +202,10 @@ class RiwayatHidupController extends BaseController
         return redirect()->to(base_url('/peserta'));
     }
 
-    public function delete($id_peserta)
+    public function delete($id_riwayat_hidup)
     {
         // Set deleted_at to current timestamp
-        $this->userModel->update($id_peserta, ['deleted_at' => date('Y-m-d H:i:s')]);
+        $this->riwayatHidupModel->update($id_riwayat_hidup, ['deleted_at' => date('Y-m-d H:i:s')]);
 
         // Set flash message and redirect
         session()->setFlashdata('success', 'Peserta deleted successfully.');

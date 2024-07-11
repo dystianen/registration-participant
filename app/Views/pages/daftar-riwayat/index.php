@@ -4,9 +4,9 @@
     <div class="card" style="width: 50rem;">
         <div class="card-body">
             <h5 class="mb-4">Daftar Riwayat Hidup</h5>
-            <form enctype="multipart/form-data" action="<?php echo base_url(); ?>/peserta/create?id_user=<?= $user['id_user'] ?>" method="post">
+            <form enctype="multipart/form-data" action="<?php echo base_url(); ?>/create-riwayat-create?id_user=<?= $user['id_user'] ?>" method="post">
                 <div class="mb-3">
-                    <label for="nama" class="form-label">Nama</label>
+                    <label for="nama" class="form-label">Nama Lengkap</label>
                     <input disabled type="text" class="form-control" id="nama" name="nama" placeholder="XXXXXXXXXXXX" value="<?= $user['name'] ?>">
                 </div>
                 <div class="mb-3">
@@ -99,15 +99,9 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                    <div>
-                        Sudah mengisi daftar riwayat hidup? <a href="/login">Login!</a>
-                    </div>
-                </div>
+
+                <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
