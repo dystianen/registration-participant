@@ -114,6 +114,7 @@ class UserController extends BaseController
             return redirect()->to(base_url("/login"));
         };
 
+        session()->setFlashdata('success', 'Admin has approved.');
         return view('/pages/waiting/index');
     }
 
